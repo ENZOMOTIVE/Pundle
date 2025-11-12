@@ -1,10 +1,16 @@
 import './index.css';
-import { ConnectKitButton } from 'connectkit';
+
 import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button"; // Assuming you have a Button component
 import HeroImage from "./../public/vite.svg"
 
+
+
+import { CustomConnectWalletButton } from './Component/ConnectKit/CustomConnectButton';
+
 function App() {
+
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-500 p-6">
 
@@ -13,29 +19,29 @@ function App() {
 
         {/* Left side: Rich Image Card */}
         <Card className="w-[350px] shadow-none hover:shadow-none">
-  {/* Hero Image */}
-  <Card.Content className="pb-0">
-    <img
-      src={HeroImage}
-      alt="Hero"
-      className="w-full h-64 object-contain rounded-xl" // object-contain prevents cropping
-    />
-  </Card.Content>
+          {/* Hero Image */}
+          <Card.Content className="pb-0">
+            <img
+              src={HeroImage}
+              alt="Hero"
+              className="w-full h-64 object-contain rounded-xl" // object-contain prevents cropping
+            />
+          </Card.Content>
 
-  {/* Optional empty header or title */}
-  <Card.Header className="pb-0">
-    <Card.Title className="text-xl font-bold text-gray-900 text-center">
-      {/* Optional tagline */}
-    </Card.Title>
-  </Card.Header>
+          {/* Optional empty header or title */}
+          <Card.Header className="pb-0">
+            <Card.Title className="text-xl font-bold text-gray-900 text-center">
+              {/* Optional tagline */}
+            </Card.Title>
+          </Card.Header>
 
-  {/* Get Started Button */}
-  <Card.Content className="flex justify-center mt-2">
-    <Button className="px-6 py-3 font-semibold rounded-xl bg-yellow-400 hover:bg-yellow-500 transition-all duration-300">
-      Get Started
-    </Button>
-  </Card.Content>
-</Card>
+          {/* Get Started Button */}
+          <Card.Content className="flex justify-center mt-2">
+            <Button className="px-6 py-3 font-semibold rounded-xl bg-yellow-400 hover:bg-yellow-500 transition-all duration-300">
+              Get Started
+            </Button>
+          </Card.Content>
+        </Card>
 
 
 
@@ -59,7 +65,7 @@ function App() {
 
               {/* Centered Connect Button */}
               <div className="flex justify-center mt-4">
-                <ConnectKitButton />
+                <CustomConnectWalletButton />
               </div>
 
             </Card.Header>
