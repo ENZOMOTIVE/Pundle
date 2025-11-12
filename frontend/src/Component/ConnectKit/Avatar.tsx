@@ -1,6 +1,6 @@
 import { Types } from "connectkit";
 import { FaWallet } from "react-icons/fa"; // Wallet icon from FontAwesome
-import { SiEthereum } from "react-icons/si"; // Ethereum icon
+
 
 const MyCustomAvatar = ({ ensImage, ensName, size, radius }: Types.CustomAvatarProps) => {
   return (

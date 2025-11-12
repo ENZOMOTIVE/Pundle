@@ -1,4 +1,4 @@
-import React from "react";
+
 import { type ReactNode } from "react";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { arbitrumSepolia, goerli, sepolia } from "wagmi/chains";
