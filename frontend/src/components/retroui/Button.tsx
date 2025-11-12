@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
-import { cva} from "class-variance-authority";
-import type {VariantProps } from "class-variance-authority";
-import React from "react"; 
-import type {  ButtonHTMLAttributes } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import React, { type ButtonHTMLAttributes } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 const buttonVariants = cva(

@@ -1,7 +1,10 @@
-import './App.css'
+import './index.css'
 
 import { ConnectKitButton } from 'connectkit'
-import { Button } from "@/components/retroui/Button";
+
+import { Button } from './components/retroui/Button';
+
+
 
 
 
@@ -15,7 +18,8 @@ function App() {
   <ConnectKitButton />
   <br />
 
-    <Button variant="link">Click Me!</Button>
+<Button >Click Me!</Button>;
+     
 
 </div>
 
