@@ -3,7 +3,7 @@ import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button"; // Assuming you have a Button component
 
 import HeroImage from "@/assets/vite.svg"
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 
 

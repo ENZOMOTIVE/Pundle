@@ -48,7 +48,7 @@ export default function Chatbot() {
             <Card.Header className="mb-4 text-center">
               <Card.Title>
                 <h1 className="text-3xl font-extrabold text-gray-900">
-                  Chatbot
+                  Pundle: AI Assitant
                 </h1>
               </Card.Title>
             </Card.Header>

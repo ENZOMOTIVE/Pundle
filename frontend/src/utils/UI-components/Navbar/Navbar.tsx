@@ -2,11 +2,14 @@ import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa";
 
 
 
 import { CustomConnectWalletButton } from "@/utils/ConnectKit/CustomConnectButton";
 import { useNavigate } from "react-router-dom";
+import { Avatar } from "@/components/retroui/Avatar";
+import avatarImage from "@/assets/react.svg"
 
 
 export default function Navbar() {
@@ -14,7 +17,7 @@ export default function Navbar() {
 
     const navigate = useNavigate()
 
-   const handleBackButton = () => { navigate("/")};
+    const handleBackButton = () => { navigate("/") };
 
     return (
         <Card className="w-full ">
@@ -28,14 +31,20 @@ export default function Navbar() {
                         <br />
 
 
-                        <Button onClick={() => {navigate("/dashboard")}} className={navbuttonStyle}>Dashboard</Button>
-                        <Button onClick={() => {navigate("/chatbot")}} className={navbuttonStyle}>AI Chat Bot</Button>
-                        <Button  onClick={() => {navigate("/marketplace")}} className={navbuttonStyle}>Marketplace</Button>
+                        <Button onClick={() => { navigate("/dashboard") }} className={navbuttonStyle}>Dashboard</Button>
+                        <Button
+                            onClick={() => navigate("/chatbot")}
+                            className={`${navbuttonStyle} flex items-center justify-center gap-2`}
+                        >
+                            <FaRobot className="w-6 h-6" />
+                            <span>AI mode</span>
+                        </Button>
+                        <Button onClick={() => { navigate("/marketplace") }} className={navbuttonStyle}>Marketplace</Button>
 
                     </div>
 
                     {/* Right side: connect wallet button */}
-                    <div  className="flex items-center gap-10">
+                    <div className="flex items-center gap-10">
                         <CustomConnectWalletButton />
                         <Button variant="outline"><FaUser /></Button>
                     </div>
