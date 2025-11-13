@@ -2,7 +2,7 @@ import { Card } from "@/components/retroui/Card";
 import { Textarea } from "@/components/retroui/Textarea";
 import Navbar from "@/utils/UI-components/Navbar/Navbar";
 import { Button } from "@/components/retroui/Button";
-import HeroImage from "@/assets/vite.svg";
+
 import { useState } from "react";
 import LineChartStyleMultiple from "@/utils/UI-components/Charts/charts";
 
