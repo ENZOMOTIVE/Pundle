@@ -8,8 +8,8 @@ import { FaRobot } from "react-icons/fa";
 
 import { CustomConnectWalletButton } from "@/utils/ConnectKit/CustomConnectButton";
 import { useNavigate } from "react-router-dom";
-import { Avatar } from "@/components/retroui/Avatar";
-import avatarImage from "@/assets/react.svg"
+
+
 
 
 export default function Navbar() {
