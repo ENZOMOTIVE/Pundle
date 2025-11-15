@@ -5,6 +5,7 @@ import { arbitrumSepolia, goerli } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import MyCustomAvatar from "./ConnectKit/Avatar";
+import { arbitrumLocal } from "./local-devnet/Arbitrium";
 
 
 
@@ -12,9 +13,11 @@ import MyCustomAvatar from "./ConnectKit/Avatar";
 
 const config = createConfig(
   getDefaultConfig({
-    chains: [arbitrumSepolia, goerli],
+    chains: [arbitrumSepolia, goerli, arbitrumLocal],
     transports: {
       [arbitrumSepolia.id]: http("https://arbitrum-sepolia.api.onfinality.io/public"),
+      [arbitrumLocal.id] : http("http://localhost:8548"),
+
 
       [goerli.id]: http("https://goerli.rpc.url"),
 
