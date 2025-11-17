@@ -1,91 +1,151 @@
-## Pundle – DeFi Lending with Option-Based Loan Protection on Arbitrum
+# 🛡️ Pundle – Option-Protected DeFi Lending on Arbitrum  
+**MVP: Borrow Assets + Buy Protection Options to Prevent Liquidation**
 
-## Project Overview:
+Pundle (ArbiShield) is a decentralized lending protocol on **Arbitrum** that introduces a new primitive in DeFi:  
+**Option-Based Loan Protection**.
 
-ArbiShield is a decentralized platform on Arbitrum that combines crypto lending/borrowing with option contracts to provide protection against sudden liquidations. Users can borrow crypto while buying “loan protection options” that act as insurance. Options can also be traded on the platform for speculative or hedging purposes.
+Borrowers can protect their positions from liquidation by purchasing a simple, fixed-term option that automatically offsets collateral losses during price crashes.
 
-This bridges a gap in DeFi: very few platforms integrate options markets with lending, despite the potential to reduce risk for borrowers and increase yield for liquidity providers.
 
-## Problem Statement:
+➡️ *Borrow Asset → Buy Option → Stay Safe From Liquidation.*
 
-- Traditional DeFi lending platforms like Aave or Compound require overcollateralized loans.
+---
 
-- Sudden price drops in collateral can trigger liquidations, causing losses to borrowers.
+## 🚀 Why Pundle?
 
-- Users currently have no seamless mechanism to hedge this risk directly within the lending platform.
+Traditional DeFi lending platforms (like Aave, Compound) require over-collateralization.  
+When collateral price drops quickly, users get liquidated, losing money instantly.
 
-- Existing options DEXes are small (less than 1% of DeFi volume) and mostly on Ethereum mainnet, with high fees and no integrated loan utility.
+There is currently **no integrated, seamless way to hedge liquidation risk** inside a lending platform.
 
-## Solution:
+**Pundle solves this.**
 
-- ArbiShield introduces options-based protection integrated with lending:
+Borrowers can purchase protection options that automatically compensate losses when the collateral price drops near liquidation levels.
 
-- Borrowers deposit collateral and take loans as usual.
+This enables:
 
-- Borrowers purchase a call or put option (subscription/insurance) that automatically protects their loan from liquidation.
+- Safer leveraged positions  
+- Predictable downside  
+- Lower liquidation risk  
+- A new revenue model for liquidity providers  
 
-- Options can be everlasting (no expiry) or fixed-term, giving users flexibility.
+---
 
-- Options are also tradable, creating a secondary market for risk hedging or speculation.
+# 🎯 MVP Scope
 
-- Liquidity providers supply options and earn fees from premiums, incentivizing participation.
+This version focuses **only** on demonstrating the core mechanism of option-protected lending.
 
-## Key Features:
+### ✔ Included in MVP
+- Deposit collateral (ETH)
+- Borrow asset (USDC)
+- Buy liquidation-protection option (simple fixed-term option)
+- Automatic protection when price falls 
+- Simple LP pool where liquidity providers deposit USDC and earn option premiums
+- Basic dashboard showing:
+  - Collateral  
+  - Borrowed amount  
+  - Protection status  
+  - Liquidation threshold  
+  - Price impact simulation graph  
 
-- Lending & Borrowing Module: Standard overcollateralized loans with flexible collateral ratios.
 
-- Option Protection Module:
 
-- Protects collateral during price drops.
+# 🧠 How Pundle Works 
 
-- Supports everlasting and fixed-term options.
+### 1. **Deposit Collateral**
+User deposits ETH as collateral.
 
-- Automatically triggers when collateral risks liquidation.
+### 2. **Borrow Asset**
+User borrows the Asset.
 
-- Option Trading Marketplace: Users can trade protective options or vanilla/exotic options.
+### 3. **Buy Protection Option**
+Borrower buys a simple put-style option:
 
-- Dashboard & Analytics: Visualize option chains, implied volatility, pay-off curves, and loan status.
+- Strike = liquidation threshold  
+- Expiry = fixed term  
+- Premium paid in USDC  
+- Backed by the LP liquidity pool  
 
-- Liquidity Provider Incentives: Earn trading fees and optional platform tokens for early adopters.
+### 4. **Price Drop **
+If ETH price drops:
 
-- Integration with Arbitrum Oracles: Accurate pricing feeds for underlying assets.
+- Without protection → liquidation  
+- With protection → option compensates shortfall  
 
-## User Flow:
+### 5. **LP Side**
+Liquidity providers deposit USDC into one pool and earn:
 
-- Deposit Collateral: User deposits $1000 USDC.
+- Option premiums  
+- Basic APY  
 
-- Borrow Loan: User borrows 1 ETH.
+---
 
-- Buy Option Protection: User purchases a call option on ETH to safeguard against price drops.
+# 📊 MVP Screens (UI Overview)
 
-**Loan Monitored:**
+### **1. Lending Page**
+- Deposit ETH  
+- Borrow USDC  
+- See LTV & liquidation threshold  
 
-If ETH price drops, the option compensates the shortfall preventing liquidation.
+### **2. Option Protection Page**
+- Premium calculation  
+- Strike level  
+- Expiry  
+- “Buy Protection” button  
 
-If price rises, user benefits from leverage normally.
+### **3. Dashboard**
+- Loan overview  
+- Protection status  
+- Liquidation risk meter  
+- Price simulation slider/graph  
 
-Option Trading (Optional): User can sell or roll over the option to other traders.
+### **4. LP Pool**
+- Deposit USDC  
+- View earnings  
+- View pool utilization  
 
-## Benefits
+---
 
-**For Users:**
+# 🏗️ Tech Stack
 
-Avoid sudden liquidations.
+| Layer | Technology |
+|------|------------|
+| Smart Contracts | Solidity / Stylus (Arbitrum Stylus Optional) |
+| Frontend | Next.js + TypeScript |
+| Wallet | wagmi + viem |
+| Price Feeds | Chainlink |
+| Charts | Recharts or Lightweight Charts |
 
-Safer leveraged positions.
+---
 
-Flexible risk management strategies.
+# 🧱 Smart Contract Architecture (MVP)
 
-**For Liquidity Providers:**
+### **1. LendingPool.sol**
+Handles deposit, borrow, and tracks collateral/loan.
 
-Earn premiums from selling options.
+### **2. ProtectionOption.sol**
+Simple put-style option with:
+- strike  
+- expiry  
+- premium  
+- payout logic  
 
-Participate in a new, high-demand DeFi product.
+### **3. OptionManager.sol**
+Handles:
+- buying protection  
+- validating active option  
+- calculating payout  
 
-**For the DeFi Ecosystem:**
+### **4. LiquidityPool.sol**
+LPs deposit USDC → pool backs option payouts.
 
-Bridges the gap between lending and derivatives markets.
+---
 
-Promotes adoption of decentralized options.
+# 🔧 Local Development
 
-Adds a novel product to Arbitrum ecosystem.
+```bash
+
+cd pundle
+npm install
+npm run dev
+```
