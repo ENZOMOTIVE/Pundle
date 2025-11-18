@@ -16,7 +16,7 @@ const config = createConfig(
     chains: [arbitrumSepolia, goerli, arbitrumLocal],
     transports: {
       [arbitrumSepolia.id]: http("https://arbitrum-sepolia.api.onfinality.io/public"),
-      [arbitrumLocal.id] : http("http://localhost:8548"),
+      [arbitrumLocal.id] : http("http://localhost:8547"),
 
 
       [goerli.id]: http("https://goerli.rpc.url"),

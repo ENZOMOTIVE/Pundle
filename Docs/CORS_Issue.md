@@ -44,3 +44,7 @@ caddy run --config ./Caddyfile --adapter caddyfile
 
 
 
+# Or Simpled added to Nitro Dev
+ 
+ I added * to allow requests from all, directly in the nitro dev
+ 

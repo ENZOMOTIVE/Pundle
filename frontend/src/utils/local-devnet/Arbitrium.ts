@@ -10,7 +10,7 @@ export const arbitrumLocal = defineChain({
     decimals: 18,
   },
   rpcUrls: {
-    public: { http: ["http://localhost:8548"] },
-    default: { http: ["http://localhost:8548"] },
+    public: { http: ["http://localhost:8547"] },
+    default: { http: ["http://localhost:8547"] },
   },
 });
