@@ -1,14 +1,13 @@
-import { Button } from "@/components/retroui/Button";
+
 import { Card } from "@/components/retroui/Card";
-import { useNavigate } from "react-router-dom";
+
+
+import BuyProtectionDialog from "./Dialoguebox";
 
 export default function OptionCard() {
-  const navigate = useNavigate();
 
-  const handleClick = () => {
-    // Navigate to dedicated protection page
-    navigate("/buy-protection");
-  };
+
+  
 
   return (
     <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl flex-1 max-w-md">
@@ -24,12 +23,9 @@ export default function OptionCard() {
           Premiums are dynamically calculated using a Black-Scholes option pricing model
           based on your collateral, strike price, and duration.
         </p>
-        <Button
-          className="bg-yellow-500 hover:bg-yellow-600 text-white mt-3 py-2 rounded-lg"
-          onClick={handleClick}
-        >
-          Learn & Buy Protection
-        </Button>
+        
+
+        <BuyProtectionDialog />
       </Card.Content>
     </Card>
   );
