@@ -28,40 +28,78 @@ const aggregatorV3InterfaceABI = [
       { internalType: "uint80", name: "answeredInRound", type: "uint80" },
     ], stateMutability: "view", type: "function"
   },
+  { inputs: [{ internalType: "uint80", name: "_roundId", type: "uint80" }], name: "getRoundData", outputs: [
+      { internalType: "uint80", name: "roundId", type: "uint80" },
+      { internalType: "int256", name: "answer", type: "int256" },
+      { internalType: "uint256", name: "startedAt", type: "uint256" },
+      { internalType: "uint256", name: "updatedAt", type: "uint256" },
+      { internalType: "uint80", name: "answeredInRound", type: "uint80" },
+    ], stateMutability: "view", type: "function"
+  },
   { inputs: [], name: "version", outputs: [{ internalType: "uint256", name: "", type: "uint256" }], stateMutability: "view", type: "function" },
 ];
 
-// Feed
+// ---- Feed ----
 const FEED_ADDRESS = "0xD1092a65338d049DB68D7Be6bD89d17a0929945e";
 const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, FEED_ADDRESS);
 
-// ---- Endpoint ----
+// ---- Live price endpoint ----
 app.get("/price", async (req: Request, res: Response) => {
   try {
-    // explicitly type as any and cast to our interface
     const roundDataRaw: any = await priceFeed.methods.latestRoundData().call();
-    const decimalsRaw: any = await priceFeed.methods.decimals().call();
+    const decimals = Number(await priceFeed.methods.decimals().call());
 
-    const decimals = Number(decimalsRaw);
-
-    const roundData: RoundData = {
-      roundId: roundDataRaw.roundId.toString(),
-      answer: roundDataRaw.answer.toString(),
-      startedAt: roundDataRaw.startedAt.toString(),
-      updatedAt: roundDataRaw.updatedAt.toString(),
-      answeredInRound: roundDataRaw.answeredInRound.toString(),
-    };
-
-    const price = Number(roundData.answer) / Math.pow(10, decimals);
+    const price = Number(roundDataRaw.answer) / Math.pow(10, decimals);
 
     res.json({
       price,
-      updatedAt: Number(roundData.updatedAt) * 1000,
-      roundData,
+      updatedAt: Number(roundDataRaw.updatedAt) * 1000,
     });
   } catch (err) {
     console.error("Chainlink error:", err);
     res.status(500).json({ error: "Failed to fetch price" });
+  }
+});
+
+// ---- Helper: simulate OHLC ----
+function simulateOHLC(price: number) {
+  const variation = price * 0.01; // 1% variation
+  const open = price + (Math.random() - 0.5) * variation * 2;
+  const close = price + (Math.random() - 0.5) * variation * 2;
+  const high = Math.max(open, close) + Math.random() * variation;
+  const low = Math.min(open, close) - Math.random() * variation;
+  return [open, high, low, close];
+}
+
+// ---- Generate evenly spaced candles ----
+function generateEvenCandles(latestPrice: number, numCandles: number, intervalMs: number) {
+  const candles = [];
+  let lastTime = Date.now() - numCandles * intervalMs;
+  let lastPrice = latestPrice;
+
+  for (let i = 0; i < numCandles; i++) {
+    const ohlc = simulateOHLC(lastPrice);
+    candles.push({ x: lastTime, y: ohlc });
+    lastTime += intervalMs;
+    lastPrice = ohlc[3]; // use close as next open
+  }
+
+  return candles;
+}
+
+// ---- Historical candles endpoint ----
+app.get("/historical-candles", async (req: Request, res: Response) => {
+  try {
+    const decimals = Number(await priceFeed.methods.decimals().call());
+    const latestRoundData: any = await priceFeed.methods.latestRoundData().call();
+    const latestPrice = Number(latestRoundData.answer) / Math.pow(10, decimals);
+
+    const candles = generateEvenCandles(latestPrice, 200, 60 * 1000); // 200 candles, 1-minute interval
+
+    res.json({ candles });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch historical candles" });
   }
 });
 

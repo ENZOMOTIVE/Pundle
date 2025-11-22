@@ -1,7 +1,8 @@
 # 🛡️ Pundle – Option-Protected DeFi Lending on Arbitrum  
 **MVP: Borrow Assets + Buy Protection Options to Prevent Liquidation**
 
-Pundle (ArbiShield) is a decentralized lending protocol on **Arbitrum** that introduces a new primitive in DeFi:  
+Pundle is a decentralized lending protocol built on Arbitrum that empowers borrowers to protect their collateral from sudden liquidations. By leveraging an option-based mechanism, Pundle allows users to hedge against market volatility, ensuring that their positions remain safe even during sharp price movements. The protocol integrates seamlessly with lending and borrowing markets, providing a gas-efficient, trustless, and fully on-chain solution for risk management in decentralized finance
+
 **Option-Based Loan Protection**.
 
 Borrowers can protect their positions from liquidation by purchasing a simple, fixed-term option that automatically offsets collateral losses during price crashes.
