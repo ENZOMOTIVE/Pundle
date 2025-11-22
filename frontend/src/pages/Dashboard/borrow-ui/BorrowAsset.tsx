@@ -2,44 +2,45 @@ import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { useState } from "react";
 import { ethers } from "ethers";
-import { option_contract_address, contract_abi } from "../solidity_utils";
+import { option_contract_address, contract_abi } from "../../../contract-abi/lending-borrowing";
 
 export default function BorrowAssetCard() {
   const [amount, setAmount] = useState<number | "">("");
   const [txStatus, setTxStatus] = useState<string>("");
 
   // Borrow function
-  const handleBorrow = async () => {
-    if (!amount || amount <= 0) {
-      alert("Enter a valid amount");
+ const handleBorrow = async () => {
+  if (!amount || amount <= 0) {
+    alert("Enter a valid amount");
+    return;
+  }
+
+  try {
+    // @ts-ignore
+    const { ethereum } = window;
+    if (!ethereum) {
+      alert("MetaMask not detected!");
       return;
     }
 
-    try {
-      // @ts-ignore
-      const { ethereum } = window;
-      if (!ethereum) {
-        alert("MetaMask not detected!");
-        return;
-      }
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(option_contract_address, contract_abi, signer);
 
-      const provider = new ethers.BrowserProvider(ethereum);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(option_contract_address, contract_abi, signer);
+    // Convert amount to USDC decimals (6 decimals)
+    const borrowAmount = ethers.parseUnits(amount.toString(), 6);
 
-      // Convert amount to Wei (if using ETH collateral, for ERC20 use different decimals)
-      const borrowAmount = ethers.parseEther(amount.toString());
+    const tx = await contract.borrow(borrowAmount);
+    setTxStatus("Transaction sent...");
 
-      const tx = await contract.borrow(borrowAmount);
-      setTxStatus("Transaction sent...");
+    await tx.wait();
+    setTxStatus("Borrow successful ✅");
+  } catch (err: any) {
+    console.error(err);
+    setTxStatus(`Error: ${err.message || err}`);
+  }
+};
 
-      await tx.wait();
-      setTxStatus("Borrow successful ✅");
-    } catch (err: any) {
-      console.error(err);
-      setTxStatus(`Error: ${err.message || err}`);
-    }
-  };
 
   return (
     <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl w-full max-w-md flex flex-col h-full">

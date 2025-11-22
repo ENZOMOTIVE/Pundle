@@ -45,10 +45,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Bottom Section: Tables */}
-      <div className="flex flex-col lg:flex-row gap-6 mt-10 max-w-6xl mx-auto w-full">
-        <Tables />
-      </div>
+      
     </div>
   );
 }

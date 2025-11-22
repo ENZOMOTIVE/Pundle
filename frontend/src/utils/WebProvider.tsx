@@ -15,7 +15,7 @@ const config = createConfig(
   getDefaultConfig({
     chains: [arbitrumSepolia, goerli, arbitrumLocal],
     transports: {
-      [arbitrumSepolia.id]: http("https://arbitrum-sepolia.api.onfinality.io/public"),
+      [arbitrumSepolia.id]: http("https://arb-sepolia.g.alchemy.com/v2/yOWUwdp0MI_LI04pUv3l6"),
       [arbitrumLocal.id] : http("http://localhost:8547"),
 
 

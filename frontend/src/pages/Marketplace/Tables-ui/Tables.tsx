@@ -3,8 +3,7 @@ import { Table } from "@/components/retroui/Table";
 import { Badge } from "@/components/retroui/Badge";
 import { ethers } from "ethers";
 
-
-import { option_contract_address, contract_abi } from "../../Dashboard/solidity_utils";
+import { option_contract_address, contract_abi } from "../../../contract-abi/lending-borrowing";
 
 interface UserData {
   address: string;
@@ -14,7 +13,8 @@ interface UserData {
 }
 
 export default function PundleUserTable() {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -23,28 +23,40 @@ export default function PundleUserTable() {
       if (!ethereum) return;
 
       const provider = new ethers.BrowserProvider(ethereum);
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress();
-
       const contract = new ethers.Contract(option_contract_address, contract_abi, provider);
 
-      const collateral = await contract.getCollateral(address);
-      const borrowed = await contract.getBorrowed(address);
-      const optionActive = await contract.getOptionStatus(address);
+      try {
+        // Fetch all users from the contract
+        const users: string[] = await contract.getAllUsers();
 
-     setUserData({
-  address,
-  collateral: ethers.formatEther(collateral),       // ETH
-  borrowed: ethers.formatUnits(borrowed, 6),       // USDC with 6 decimals
-  optionActive,
-});
+        const userDataList: UserData[] = await Promise.all(
+          users.map(async (user) => {
+            const collateral = await contract.getCollateral(user);
+            const borrowed = await contract.getBorrowed(user);
+            const [active] = await contract.getOptionStatus(user);
 
+            return {
+              address: user,
+              collateral: ethers.formatEther(collateral), // ETH
+              borrowed: ethers.formatUnits(borrowed, 6),  // USDC with 6 decimals
+              optionActive: active,
+            };
+          })
+        );
+
+        setUserData(userDataList);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchUserData();
   }, []);
 
-  if (!userData) return <p>Loading user data...</p>;
+  if (loading) return <p>Loading user data...</p>;
+  if (!userData.length) return <p>No loans found.</p>;
 
   return (
     <Table className="max-w-lg mb-6">
@@ -57,16 +69,18 @@ export default function PundleUserTable() {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        <Table.Row key={userData.address}>
-          <Table.Cell className="font-medium">{userData.address}</Table.Cell>
-          <Table.Cell>{userData.collateral}</Table.Cell>
-          <Table.Cell>{userData.borrowed}</Table.Cell>
-          <Table.Cell>
-            <Badge variant={userData.optionActive ? "solid" : "outline"} size="sm">
-              {userData.optionActive ? "Active" : "Inactive"}
-            </Badge>
-          </Table.Cell>
-        </Table.Row>
+        {userData.map((user) => (
+          <Table.Row key={user.address}>
+            <Table.Cell className="font-medium">{user.address}</Table.Cell>
+            <Table.Cell>{user.collateral}</Table.Cell>
+            <Table.Cell>{user.borrowed}</Table.Cell>
+            <Table.Cell>
+              <Badge variant={user.optionActive ? "solid" : "outline"} size="sm">
+                {user.optionActive ? "Active" : "Inactive"}
+              </Badge>
+            </Table.Cell>
+          </Table.Row>
+        ))}
       </Table.Body>
     </Table>
   );
