@@ -2,7 +2,8 @@ import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
-import { FaRobot } from "react-icons/fa";
+import { AiFillDollarCircle } from "react-icons/ai";
+
 
 
 
@@ -33,11 +34,11 @@ export default function Navbar() {
 
                         <Button onClick={() => { navigate("/dashboard") }} className={navbuttonStyle}>Dashboard</Button>
                         <Button
-                            onClick={() => navigate("/chatbot")}
+                            onClick={() => navigate("/live-data")}
                             className={`${navbuttonStyle} flex items-center justify-center gap-2`}
                         >
-                            <FaRobot className="w-6 h-6" />
-                            <span>AI mode</span>
+                            <AiFillDollarCircle className="w-6 h-6" />
+                            <span>Live Price Data </span>
                         </Button>
                         <Button onClick={() => { navigate("/marketplace") }} className={navbuttonStyle}>Marketplace</Button>
 

@@ -32,22 +32,7 @@ This enables:
 
 ---
 
-# 🎯 MVP Scope
-
-This version focuses **only** on demonstrating the core mechanism of option-protected lending.
-
-### ✔ Included in MVP
-- Deposit collateral (ETH)
-- Borrow asset (USDC)
-- Buy liquidation-protection option (simple fixed-term option)
-- Automatic protection when price falls 
-- Simple LP pool where liquidity providers deposit USDC and earn option premiums
-- Basic dashboard showing:
-  - Collateral  
-  - Borrowed amount  
-  - Protection status  
-  - Liquidation threshold  
-  - Price impact simulation graph  
+ 
 
 
 

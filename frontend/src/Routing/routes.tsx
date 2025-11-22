@@ -19,7 +19,7 @@ export default function AppRoutes(){
 
                 
                 <Route path="/dashboard" element={< Dashboard/>} />
-                <Route path="/chatbot" element={<Chatbot />} />
+                <Route path="/live-data" element={<Chatbot />} />
                 <Route path="/marketplace" element={<Marketplace />} />
 
 

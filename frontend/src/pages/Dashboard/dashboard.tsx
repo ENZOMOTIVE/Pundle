@@ -1,88 +1,54 @@
-import { Badge } from "@/components/retroui/Badge";
-import { Table } from "@/components/retroui/Table";
-
-import { invoices } from "./constant_invoices";
 import Navbar from "@/utils/UI-components/Navbar/Navbar";
+import Tables from "./Tables-ui/Tables";
+import HealthFactorDonut from "@/utils/UI-components/Charts/CustomPieChart";
+import DepositAsset from "./deposit-ui/Deposit";
+import BorrowAssetCard from "./borrow-ui/BorrowAsset";
+import OptionCard from "./Option-ui/Optionui";
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col min-h-screen p-6">
-      {/* Navbar with top spacing */}
+    <div className="flex flex-col min-h-screen p-6 bg-yellow-150">
+      {/* Navbar */}
       <div className="mt-4 w-full">
         <Navbar />
       </div>
 
-     {/* Main Content */}
-<div className="flex gap-6 w-full max-w-6xl justify-center mt-6 mx-auto ">
-  {/* First Table */}
-  <Table className="max-w-lg mb-6">
-    <Table.Header className="bg-yellow-400">
-      <Table.Row>
-        <Table.Head className="w-[100px]">Invoice</Table.Head>
-        <Table.Head>Customer</Table.Head>
-        <Table.Head>Status</Table.Head>
-        <Table.Head>Method</Table.Head>
-        <Table.Head className="text-right">Amount</Table.Head>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      {invoices.map((invoice) => (
-        <Table.Row key={invoice.invoice}>
-          <Table.Cell className="font-medium">{invoice.invoice}</Table.Cell>
-          <Table.Cell>{invoice.customer}</Table.Cell>
-          <Table.Cell>
-            <Badge variant="solid" size="sm">
-              {invoice.paymentStatus}
-            </Badge>
-          </Table.Cell>
-          <Table.Cell>{invoice.paymentMethod}</Table.Cell>
-          <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
-        </Table.Row>
-      ))}
-    </Table.Body>
-    <Table.Footer>
-      <Table.Row>
-        <Table.Cell colSpan={4}>Total</Table.Cell>
-        <Table.Cell className="text-right">$2,500.00</Table.Cell>
-      </Table.Row>
-    </Table.Footer>
-  </Table>
+      {/* Top Section */}
+      <div className="flex flex-col lg:flex-row gap-6 mt-6 max-w-6xl mx-auto w-full">
+        {/* Left Column: Deposit + Borrow side by side */}
+        <div className="flex gap-6 flex-1">
 
-  {/* Second Table */}
-  <Table className="max-w-lg mb-6">
-    <Table.Header className="bg-yellow-400">
-      <Table.Row>
-        <Table.Head className="w-[100px]">Invoice</Table.Head>
-        <Table.Head>Customer</Table.Head>
-        <Table.Head>Status</Table.Head>
-        <Table.Head>Method</Table.Head>
-        <Table.Head className="text-right">Amount</Table.Head>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      {invoices.map((invoice) => (
-        <Table.Row key={invoice.invoice + "-second"}>
-          <Table.Cell className="font-medium">{invoice.invoice}</Table.Cell>
-          <Table.Cell>{invoice.customer}</Table.Cell>
-          <Table.Cell>
-            <Badge variant="solid" size="sm">
-              {invoice.paymentStatus}
-            </Badge>
-          </Table.Cell>
-          <Table.Cell>{invoice.paymentMethod}</Table.Cell>
-          <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
-        </Table.Row>
-      ))}
-    </Table.Body>
-    <Table.Footer>
-      <Table.Row>
-        <Table.Cell colSpan={4}>Total</Table.Cell>
-        <Table.Cell className="text-right">$2,500.00</Table.Cell>
-      </Table.Row>
-    </Table.Footer>
-  </Table>
-</div>
+          {/* Borrow Card */}
+          <div className="flex-1">
+            <BorrowAssetCard />
+          </div>
+          
+          {/* Deposit Card */}
+          <div className="flex-1">
+            <DepositAsset />
+          </div>
+          
+        </div>
 
+        {/* Right Column: Health Factor (top) + Option Card (bottom) */}
+        <div className="flex flex-col gap-6 w-80">
+          {/* Health Factor */}
+          <div className="flex flex-col items-center p-4 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl">
+            <h3 className="text-gray-700 font-semibold mb-2 text-lg">Health Factor</h3>
+            <div className="w-40 h-40">
+              <HealthFactorDonut healthFactor={75} />
+            </div>
+          </div>
+
+          {/* Option Card */}
+          <OptionCard />
+        </div>
+      </div>
+
+      {/* Bottom Section: Tables */}
+      <div className="flex flex-col lg:flex-row gap-6 mt-10 max-w-6xl mx-auto w-full">
+        <Tables />
+      </div>
     </div>
   );
 }

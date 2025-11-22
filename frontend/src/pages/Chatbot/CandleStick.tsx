@@ -28,7 +28,7 @@ export default function CandlestickChart() {
 
   const options: ApexOptions = {
     chart: { type: "candlestick" as const, height: 350 },
-    title: { text: "Live Price Feed Simulation", align: "left" },
+    title: { text: "Live Price Feed of ARB / USDC ", align: "left" },
     xaxis: { type: "datetime" },
     yaxis: { tooltip: { enabled: true } },
   };
