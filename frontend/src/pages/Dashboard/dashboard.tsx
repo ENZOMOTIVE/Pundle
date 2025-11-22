@@ -1,5 +1,5 @@
 import Navbar from "@/utils/UI-components/Navbar/Navbar";
-import Tables from "./Tables-ui/Tables";
+import Tables from "../Marketplace/Tables-ui/Tables";
 import HealthFactorDonut from "@/utils/UI-components/Charts/CustomPieChart";
 import DepositAsset from "./deposit-ui/Deposit";
 import BorrowAssetCard from "./borrow-ui/BorrowAsset";
@@ -22,7 +22,7 @@ export default function Dashboard() {
           <div className="flex-1">
             <BorrowAssetCard />
           </div>
-          
+
           {/* Deposit Card */}
           <div className="flex-1">
             <DepositAsset />

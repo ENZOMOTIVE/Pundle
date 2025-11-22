@@ -1,7 +1,46 @@
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
+import { useState } from "react";
+import { ethers } from "ethers";
+import { option_contract_address, contract_abi } from "../solidity_utils";
 
 export default function BorrowAssetCard() {
+  const [amount, setAmount] = useState<number | "">("");
+  const [txStatus, setTxStatus] = useState<string>("");
+
+  // Borrow function
+  const handleBorrow = async () => {
+    if (!amount || amount <= 0) {
+      alert("Enter a valid amount");
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      const { ethereum } = window;
+      if (!ethereum) {
+        alert("MetaMask not detected!");
+        return;
+      }
+
+      const provider = new ethers.BrowserProvider(ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(option_contract_address, contract_abi, signer);
+
+      // Convert amount to Wei (if using ETH collateral, for ERC20 use different decimals)
+      const borrowAmount = ethers.parseEther(amount.toString());
+
+      const tx = await contract.borrow(borrowAmount);
+      setTxStatus("Transaction sent...");
+
+      await tx.wait();
+      setTxStatus("Borrow successful ✅");
+    } catch (err: any) {
+      console.error(err);
+      setTxStatus(`Error: ${err.message || err}`);
+    }
+  };
+
   return (
     <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl w-full max-w-md flex flex-col h-full">
       <Card.Title>Borrow USDC</Card.Title>
@@ -15,6 +54,8 @@ export default function BorrowAssetCard() {
             <input
               type="number"
               placeholder="0.00"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
               className="flex-1 border border-gray-300 rounded-md p-2"
             />
             <span className="flex items-center px-3 bg-gray-100 rounded-md text-gray-700 font-medium">
@@ -23,13 +64,15 @@ export default function BorrowAssetCard() {
           </div>
         </div>
 
-        {/* Spacer to stretch the card */}
+        {/* Spacer */}
         <div className="flex-1" />
 
         {/* Target LTV */}
         <div className="flex justify-between text-sm text-gray-500">
           <span>Target LTV:</span>
-          <span>45% <span className="text-green-600 font-semibold">Safe</span></span>
+          <span>
+            45% <span className="text-green-600 font-semibold">Safe</span>
+          </span>
         </div>
 
         {/* Borrow APR */}
@@ -45,9 +88,14 @@ export default function BorrowAssetCard() {
         </div>
 
         {/* Borrow Button */}
-        <Button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 rounded-lg">
+        <Button
+          className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 rounded-lg"
+          onClick={handleBorrow}
+        >
           Borrow USDC
         </Button>
+
+        {txStatus && <p className="text-sm mt-2 text-gray-700">{txStatus}</p>}
       </Card.Content>
     </Card>
   );
