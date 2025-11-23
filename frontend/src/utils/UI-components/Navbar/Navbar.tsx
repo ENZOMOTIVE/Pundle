@@ -1,7 +1,7 @@
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
 import { FaArrowLeft } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
+
 import { AiFillDollarCircle } from "react-icons/ai";
 
 
@@ -47,7 +47,7 @@ export default function Navbar() {
                     {/* Right side: connect wallet button */}
                     <div className="flex items-center gap-10">
                         <CustomConnectWalletButton />
-                        <Button variant="outline"><FaUser /></Button>
+
                     </div>
                 </div>
             </Card.Header>

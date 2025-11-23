@@ -55,7 +55,7 @@ const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
               isAnimationActive={false}
               className="w-full h-full"
             >
-              {data.map((entry, index) => (
+              {data.map((_, index) => (
                 <Cell 
                   key={`cell-${index}`} 
                   fill={colors[index % colors.length]} 

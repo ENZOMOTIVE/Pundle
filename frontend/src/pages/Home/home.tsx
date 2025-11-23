@@ -1,28 +1,22 @@
-
 import { Card } from "@/components/retroui/Card";
-import { Button } from "@/components/retroui/Button"; // Assuming you have a Button component
+import { Button } from "@/components/retroui/Button";
 
-import HeroImage from "@/assets/vite.svg"
+import HeroImage from "@/assets/Pundle-removebg-preview.png";
 import { useNavigate } from "react-router-dom";
-
-
-
 
 import { CustomConnectWalletButton } from "@/utils/ConnectKit/CustomConnectButton";
 import { useState } from "react";
 import { Loader } from "@/components/retroui/Loader";
 
 export function Home() {
-
-    const navigate = useNavigate()
-
-     const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleGetStarted = () => {
-    setLoading(true); 
+    setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/dashboard"); 
+      navigate("/dashboard");
     }, 1500);
   };
 
@@ -34,61 +28,47 @@ export function Home() {
     );
   }
 
-    return (
-    <div className="flex flex-col items-center justify-center min-h-screen  p-6">
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-6">
 
       {/* Two-column hero */}
       <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl w-full">
 
-        {/* Left side: Rich Image Card */}
+        {/* Left side: Logo Image Card */}
         <Card className="w-[350px] shadow-none hover:shadow-none">
-          {/* Hero Image */}
           <Card.Content className="pb-0">
             <img
               src={HeroImage}
               alt="Hero"
-              className="w-full h-64 object-contain rounded-xl" // object-contain prevents cropping
+              className="w-full h-80 object-contain rounded-xl scale-125"
             />
           </Card.Content>
 
-          {/* Optional empty header or title */}
-          <Card.Header className="pb-0">
-            <Card.Title className="text-xl font-bold text-gray-900 text-center">
-              {/* Optional tagline */}
-            </Card.Title>
-          </Card.Header>
-
-          {/* Get Started Button */}
           <Card.Content className="flex justify-center mt-2">
-            <Button className="px-6 py-3 font-semibold rounded-xl bg-yellow-400 hover:bg-yellow-500 transition-all duration-300"
-            onClick={handleGetStarted}
+            <Button
+              className="px-6 py-3 font-semibold rounded-xl bg-yellow-400 hover:bg-yellow-500 transition-all duration-300"
+              onClick={handleGetStarted}
             >
               Get Started
             </Button>
           </Card.Content>
         </Card>
 
-
-
-        {/* Right side: Welcome / Brief Card */}
+        {/* Right side: Main Intro Card */}
         <div className="flex-1">
           <Card className="rounded-2xl shadow-2xl hover:shadow-3xl p-8 transform transition-all duration-300 hover:scale-105">
             <Card.Header className="flex flex-col items-center space-y-6">
 
-              {/* Centered Title */}
               <Card.Title>
                 <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 text-center">
                   Welcome to Pundle
                 </h1>
               </Card.Title>
 
-              {/* Centered Description */}
               <Card.Description className="text-gray-700 text-lg sm:text-xl leading-relaxed text-center">
-                Pundle is a decentralized platform on Arbitrum that runs on top of Aave Protocol that combines crypto lending/borrowing
-                with option contracts to protect against sudden liquidations. Borrow safely while hedging risk.
+Pundle is a next-generation decentralized lending protocol on Arbitrum that lets borrowers protect their collateral from sudden liquidations with a seamless, on-chain option-based safety layer. By automatically hedging against market volatility, Pundle keeps your positions secure even during sharp price swings — no manual monitoring, no stress. Powered by gas-efficient architecture and deep integration with lending markets, Pundle delivers a trustless, transparent, and user-friendly risk-management experience designed for the future of DeFi.
               </Card.Description>
 
-              {/* Centered Connect Button */}
               <div className="flex justify-center mt-4">
                 <CustomConnectWalletButton />
               </div>
@@ -97,37 +77,48 @@ export function Home() {
           </Card>
         </div>
 
-
       </div>
 
-      {/* Optional: Key Features Section */}
+      {/* Key Features */}
       <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full px-6">
+
+        {/* Protection Module */}
         <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl hover:scale-105 transform transition-all duration-300">
           <Card.Title>
-            <h3 className="text-2xl font-bold text-gray-900">Option Protection Module</h3>
+            <h3 className="text-2xl font-bold text-gray-900">Liquidation Protection</h3>
           </Card.Title>
           <Card.Description className="text-gray-700 mt-2">
-            Protects collateral during price drops with everlasting or fixed-term options.
+           
+
+Shield your collateral from sudden price crashes — borrow with confidence.
           </Card.Description>
         </Card>
 
+      
+
+       
+
+        {/* Protection Pricing */}
         <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl hover:scale-105 transform transition-all duration-300">
           <Card.Title>
-            <h3 className="text-2xl font-bold text-gray-900">Trading Marketplace</h3>
+            <h3 className="text-2xl font-bold text-gray-900">On-Chain Pricing Engine</h3>
           </Card.Title>
           <Card.Description className="text-gray-700 mt-2">
-            Users can trade protective options or vanilla/exotic options for hedging or speculation.
+          On-chain Black-Scholes pricing that’s fast, accurate, and trustless — powered by Arbitrum Stylus.
           </Card.Description>
         </Card>
 
+        {/* Buy Protection */}
         <Card className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl hover:scale-105 transform transition-all duration-300">
           <Card.Title>
-            <h3 className="text-2xl font-bold text-gray-900">Dashboard & Analytics</h3>
+            <h3 className="text-2xl font-bold text-gray-900">Dashboard & Analysis</h3>
           </Card.Title>
           <Card.Description className="text-gray-700 mt-2">
-            Visualize option chains, implied volatility, pay-off curves, and loan status in real-time.
-          </Card.Description>
+Live and historical price data at your fingertips. Powered by Chainlink oracles for precision you can trust.          </Card.Description>
         </Card>
+
+       
+
       </div>
 
     </div>

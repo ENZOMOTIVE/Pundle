@@ -1,20 +1,16 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-
 interface PieData {
   name: string;
   value: number;
+  [key: string]: string | number; // 👈 required for Recharts
 }
-
-const data: PieData[] = [
-  { name: "Healthy", value: 70 },   // example health factor
-  { name: "Risk", value: 30 },
-];
 
 const COLORS = ["#16a34a", "#dc2626"]; // Green for healthy, red for risk
 
 export default function HealthFactorDonut({ healthFactor = 70 }: { healthFactor?: number }) {
   const risk = 100 - healthFactor;
-  const chartData = [
+
+  const chartData: PieData[] = [
     { name: "Healthy", value: healthFactor },
     { name: "Risk", value: risk },
   ];
@@ -31,16 +27,15 @@ export default function HealthFactorDonut({ healthFactor = 70 }: { healthFactor?
             outerRadius={80}
             paddingAngle={2}
             startAngle={90}
-            endAngle={-270} // ensures clockwise from top
+            endAngle={-270}
           >
-            {chartData.map((entry, index) => (
+            {chartData.map((_, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} />
             ))}
           </Pie>
         </PieChart>
       </ResponsiveContainer>
 
-      {/* Percentage in the middle */}
       <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-black">
         <span className="text-xl font-bold">{healthFactor}%</span>
         <span className="text-xs">Health Factor</span>

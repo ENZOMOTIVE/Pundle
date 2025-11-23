@@ -4,29 +4,20 @@ import { Text } from "@/components/retroui/Text";
 import { useState } from "react";
 import { ethers } from "ethers";
 import { blockschules_contract_abi, blockschules_contract_address } from "@/contract-abi/BlockSchules-contract";
+import { contract_abi, option_contract_address } from "@/contract-abi/lending-borrowing";
+
+// Pundle contract ABI & address
+
 
 export default function BuyProtectionDialog() {
-  // Default safe values
-  const [collateralPrice, setCollateralPrice] = useState<string>("2000"); // USD
-  const [strikePrice, setStrikePrice] = useState<string>("2000");         // USD
-  const [expiryDays, setExpiryDays] = useState<string>("30");             // days
+  const [collateralPrice, setCollateralPrice] = useState<string>("2000");
+  const [strikePrice, setStrikePrice] = useState<string>("2000");
+  const [expiryDays, setExpiryDays] = useState<string>("30");
+  const [premium, setPremium] = useState<number | null>(null);
   const [txStatus, setTxStatus] = useState<string>("");
 
-  const handleBuyProtection = async () => {
-    // Validate inputs
-    if (!collateralPrice || !strikePrice || !expiryDays) {
-      alert("Please fill all fields");
-      return;
-    }
-    if (Number(collateralPrice) <= 0 || Number(strikePrice) <= 0 || Number(expiryDays) <= 0) {
-      alert("All values must be greater than 0");
-      return;
-    }
-    if (Number(collateralPrice) < Number(strikePrice)) {
-      alert("Collateral price must be >= strike price");
-      return;
-    }
-
+  // Step 1: Calculate premium
+  const calculatePremium = async () => {
     try {
       // @ts-ignore
       const { ethereum } = window;
@@ -34,27 +25,71 @@ export default function BuyProtectionDialog() {
 
       const provider = new ethers.BrowserProvider(ethereum);
       const signer = await provider.getSigner();
-      const contract = new ethers.Contract(blockschules_contract_address, blockschules_contract_abi, signer);
 
-      // Convert to 18 decimals (matches your cast call)
+      const blackScholes = new ethers.Contract(
+        blockschules_contract_address,
+        blockschules_contract_abi,
+        signer
+      );
+
       const collateral = ethers.parseUnits(collateralPrice, 18);
       const strike = ethers.parseUnits(strikePrice, 18);
-      const expiry = Number(expiryDays) * 24 * 60 * 60; // days → seconds
+      const expiry = Number(expiryDays) * 24 * 60 * 60;
 
-      console.log("Collateral:", collateral.toString());
-      console.log("Strike:", strike.toString());
-      console.log("Expiry (seconds):", expiry);
+      const [mantissa, scale] = await blackScholes.computePutPremium(
+        collateral,
+        strike,
+        expiry
+      );
 
-      // Call contract
-      const [mantissa, scale] = await contract.computePutPremium(collateral, strike, expiry);
-      const premium = Number(mantissa) / 10 ** Number(scale);
-
-      setTxStatus(`Calculated Premium: ${premium.toFixed(6)} USD`);
+      const calculatedPremium = Number(mantissa) / 10 ** Number(scale);
+      setPremium(calculatedPremium);
+      setTxStatus(`Calculated Premium: ${calculatedPremium.toFixed(6)} ETH`);
     } catch (err: any) {
       console.error(err);
-      setTxStatus(`Error: ${err.message || err}`);
+      setTxStatus(`Error calculating premium: ${err.message || err}`);
     }
   };
+
+  // Step 2: Buy protection by sending premium to Pundle
+const buyProtection = async () => {
+  if (!premium) return alert("Calculate premium first!");
+
+  try {
+    // @ts-ignore
+    const { ethereum } = window;
+    if (!ethereum) return alert("MetaMask not detected!");
+
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+
+    const pundle = new ethers.Contract(
+      option_contract_address,
+      contract_abi,
+      signer
+    );
+
+    const expiry = Math.floor(Date.now() / 1000) + Number(expiryDays) * 24 * 60 * 60;
+
+    // Convert premium safely
+    const premiumInWei = ethers.parseUnits(premium.toFixed(18), 18);
+    const strikeInWei = ethers.parseUnits(strikePrice, 18);
+
+    const tx = await pundle.buyProtection(
+      strikeInWei,
+      expiry,
+      premiumInWei,
+      { value: premiumInWei }
+    );
+
+    await tx.wait();
+    setTxStatus(`Protection purchased successfully! Premium: ${premium.toFixed(6)} ETH`);
+  } catch (err: any) {
+    console.error(err);
+    setTxStatus(`Error buying protection: ${err.message || err}`);
+  }
+};
+
 
   return (
     <Dialog>
@@ -72,7 +107,6 @@ export default function BuyProtectionDialog() {
         </Dialog.Header>
 
         <section className="flex flex-col gap-6 mt-4">
-          {/* Collateral Price Input */}
           <div className="flex flex-col gap-1">
             <label className="text-gray-600">Collateral Price (USD)</label>
             <input
@@ -83,7 +117,6 @@ export default function BuyProtectionDialog() {
             />
           </div>
 
-          {/* Strike Price Input */}
           <div className="flex flex-col gap-1">
             <label className="text-gray-600">Strike Price (USD)</label>
             <input
@@ -94,7 +127,6 @@ export default function BuyProtectionDialog() {
             />
           </div>
 
-          {/* Expiry Input */}
           <div className="flex flex-col gap-1">
             <label className="text-gray-600">Time to Expiry (days)</label>
             <input
@@ -105,17 +137,22 @@ export default function BuyProtectionDialog() {
             />
           </div>
 
-          {/* Action Button */}
-          <div className="flex justify-end mt-4">
+          <div className="flex gap-2 justify-end mt-4">
             <Button
-              className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg"
-              onClick={handleBuyProtection}
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg"
+              onClick={calculatePremium}
             >
               Calculate Premium
             </Button>
+            <Button
+              className="bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg"
+              onClick={buyProtection}
+              disabled={!premium}
+            >
+              Buy Protection
+            </Button>
           </div>
 
-          {/* Transaction / Premium Status */}
           {txStatus && <p className="text-gray-700 mt-2">{txStatus}</p>}
         </section>
       </Dialog.Content>
