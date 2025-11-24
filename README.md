@@ -117,6 +117,9 @@ deployment tx hash: 0x4b63779b1fbdaf2aa7a11e1d62038d0cc48a15df25806a8e215602eea8
 contract activated and ready onchain with tx hash: 0x9d81f991d1d85624a001292118372f180208511246c7c019b8b77954a2daff4b
 ```
 
+## Demo Video:
+https://www.loom.com/share/a15ed3c6553b46b0bd1c3b551abdef07
+
 
 
 
